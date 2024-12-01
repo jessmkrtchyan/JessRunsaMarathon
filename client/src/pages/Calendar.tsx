@@ -6,6 +6,7 @@ import { CalendarDay } from '@/components/training/CalendarDay';
 import { ViewToggle } from '@/components/training/ViewToggle';
 import { MonthNavigation } from '@/components/training/MonthNavigation';
 import { ExportButton } from '@/components/training/ExportButton';
+import { PrintButton } from '@/components/training/PrintButton';
 import { useTrainingData } from '@/lib/training-data';
 import type { TrainingDay, CompletionState } from '@/lib/types';
 
@@ -59,29 +60,35 @@ export function Calendar() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
-      <div className="mb-6 flex justify-between items-center">
+      <div className="mb-6 flex justify-between items-center print:mb-2">
         <h1 className="text-3xl font-bold text-gray-900">
           Marathon Training Calendar
         </h1>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 print:hidden">
           {trainingDays && (
-            <ExportButton 
-              trainingDays={trainingDays} 
-              completionState={completionState}
-            />
+            <>
+              <ExportButton 
+                trainingDays={trainingDays} 
+                completionState={completionState}
+              />
+              <PrintButton
+                trainingDays={trainingDays}
+                completionState={completionState}
+              />
+            </>
           )}
           <ViewToggle view={view} onViewChange={setView} />
         </div>
       </div>
 
-      <Card className="p-6">
+      <Card className="p-6 print:p-2 print:shadow-none">
         <MonthNavigation
           currentDate={currentDate}
           onNavigate={handleNavigate}
           view={view}
         />
 
-        <div className="grid grid-cols-7 gap-2 mb-2">
+        <div className="grid grid-cols-7 gap-2 mb-2 print:gap-1">
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
             <div key={day} className="text-center text-sm font-medium text-gray-600">
               {day}
@@ -89,7 +96,7 @@ export function Calendar() {
           ))}
         </div>
 
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-7 gap-2 calendar-grid">
           {days.map(({ date, training, isCurrentMonth }) => (
             <div
               key={date.toISOString()}

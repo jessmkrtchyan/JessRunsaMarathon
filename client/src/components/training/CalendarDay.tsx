@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { TrainingDay } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import confetti from 'canvas-confetti';
 
 interface CalendarDayProps {
   trainingDay: TrainingDay | null;
@@ -20,6 +21,26 @@ export function CalendarDay({ trainingDay, date, isCompleted, onToggleCompletion
     );
   }
 
+  const checkboxRef = useRef<HTMLButtonElement>(null);
+
+  const handleCheck = (checked: boolean) => {
+    onToggleCompletion(trainingDay.date, checked);
+    
+    if (checked && checkboxRef.current) {
+      const rect = checkboxRef.current.getBoundingClientRect();
+      const x = (rect.left + rect.width / 2) / window.innerWidth;
+      const y = (rect.top + rect.height / 2) / window.innerHeight;
+      
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { x, y },
+        colors: ['#4CAF50', '#8BC34A', '#CDDC39'],
+        gravity: 1.5
+      });
+    }
+  };
+
   return (
     <Card 
       className={cn(
@@ -32,10 +53,9 @@ export function CalendarDay({ trainingDay, date, isCompleted, onToggleCompletion
       <div className="flex justify-between items-start">
         <span className="text-sm font-medium">{date.getDate()}</span>
         <Checkbox
+          ref={checkboxRef}
           checked={isCompleted}
-          onCheckedChange={(checked) => {
-            onToggleCompletion(trainingDay.date, checked as boolean);
-          }}
+          onCheckedChange={handleCheck}
         />
       </div>
       

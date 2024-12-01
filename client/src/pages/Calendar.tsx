@@ -62,7 +62,7 @@ export function Calendar() {
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       <div className="mb-6 flex justify-between items-center print:mb-2">
         <h1 className="text-3xl font-bold text-gray-900">
-          Jess Runs a (Half) Marathon
+          Jess Runs a (Half) Marathon 🏃🏻‍♀️
         </h1>
         <div className="flex items-center gap-4 print:hidden">
           {trainingDays && (

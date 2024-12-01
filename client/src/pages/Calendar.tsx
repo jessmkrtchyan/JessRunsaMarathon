@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { CalendarDay } from '@/components/training/CalendarDay';
 import { ViewToggle } from '@/components/training/ViewToggle';
 import { MonthNavigation } from '@/components/training/MonthNavigation';
+import { ExportButton } from '@/components/training/ExportButton';
 import { useTrainingData } from '@/lib/training-data';
 import type { TrainingDay, CompletionState } from '@/lib/types';
 
@@ -62,7 +63,15 @@ export function Calendar() {
         <h1 className="text-3xl font-bold text-gray-900">
           Marathon Training Calendar
         </h1>
-        <ViewToggle view={view} onViewChange={setView} />
+        <div className="flex items-center gap-4">
+          {trainingDays && (
+            <ExportButton 
+              trainingDays={trainingDays} 
+              completionState={completionState}
+            />
+          )}
+          <ViewToggle view={view} onViewChange={setView} />
+        </div>
       </div>
 
       <Card className="p-6">
@@ -88,7 +97,7 @@ export function Calendar() {
             >
               <CalendarDay
                 date={date}
-                trainingDay={training}
+                trainingDay={training || null}
                 isCompleted={completionState[format(date, 'M/d/yyyy')] || false}
                 onToggleCompletion={handleToggleCompletion}
               />
